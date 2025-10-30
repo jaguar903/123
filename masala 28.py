@@ -67,4 +67,5 @@ if umumiy_summa > 100000:
     print(f"\nUmumiy summa 100,000 so'mdan oshgani uchun 10% chegirma qo'llanildi: -{int(chegirma)} so'm")
 
 print(f"\nTo'lanadigan summa: {int(umumiy_summa)} so'm")
+#test
 
