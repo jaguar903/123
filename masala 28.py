@@ -1,71 +1,59 @@
+import sys, getpass
+
+maxs = {"Olma":5000,"Banan":10000,"Anor":12000,"Nok":15000,"Tarvuz":16000,"Apelsin":20000,"Kivi":8000}
 print("Mini marketga xush kelibsiz!")
-
-maxsulotlar = {
-    "Olma": 5000,
-    "Banan": 10000,
-    "Anor": 12000,
-    "Nok": 15000,
-    "Tarvuz": 16000,
-    "Apelsin": 20000,
-    "Kivi": 8000
-}
-
-print("Bizda mavjud maxsulotlar:")
-for nom, narx in maxsulotlar.items():
-    print(f" - {nom}: {narx} so'm/kg")
+print("Mavjud:", ", ".join(f"{k}({v})" for k,v in maxs.items()))
 
 tanlangan = {}
-
 for i in range(3):
     while True:
-        a = input(f"{i+1}-chi maxsulotni tanlang: ").title()
-        if a in maxsulotlar:
-            break
-        else:
-            print("Bunday mahsulot mavjud emas, boshqa tanlang.")
-    
+        nom = input(f"{i+1}-chi mahsulot: ").title()
+        if nom in maxs: break
+        print("Mavjud emas.")
     while True:
         try:
-            miqdor = int(input(f"{a} dan necha dona kerak? "))
-            if miqdor > 0:
-                break
-            else:
-                print("Iltimos, musbat son kiriting.")
-        except ValueError:
-            print("Iltimos, to'g'ri son kiriting.")
-    
-    tanlangan[a] = miqdor
+            m = int(input(f"{nom} nechta? "))
+            if m>0: break
+        except: pass
+        print("Musbat butun son kiriting.")
+    tanlangan[nom] = tanlangan.get(nom,0) + m
 
-print("Siz tanlagan mahsulotlar:")
-umumiy_summa = 0
-for nom, miqdor in tanlangan.items():
-    narx = maxsulotlar[nom]
-    summa = narx * miqdor
-    umumiy_summa += summa
-    print(f" - {nom}: {miqdor} dona x {narx} so'm = {summa} so'm")
+chegirma = 0
+jami = sum(maxs[n]*q for n,q in tanlangan.items())
+if jami > 100000:
+    chegirma = int(jami * 0.10)
+    jami -= chegirma
 
-if umumiy_summa > 100000:
-    chegirma = umumiy_summa * 0.10
-    umumiy_summa -= chegirma
-    print(f"Umumiy summa 100,000 so'mdan oshgani uchun 10% chegirma qo'llanildi: -{int(chegirma)} so'm")
+print("\n--- Hisob ---")
+for n,q in tanlangan.items():
+    narx = maxs[n]
+    print(f"{n}: {q} dona x {narx} = {narx*q} so'm")
+print(f"Chegirma: {chegirma} so'm")
+print(f"To'lanishi kerak: {int(jami)} so'm")
 
-while True:
-    tolov = input("To'lov turini tanlang (Naqt/Karta): ").strip().lower()
-    if tolov in ["naqt", "karta"]:
-        break
+kart_bal = {"Uzcard":300000,"Humo":200000}
+kart_pin = {"Uzcard":"1111","Humo":"2222"}
+
+typ = input("\nTo'lov (Naqt/Karta): ").strip().lower()
+if typ == "naqt":
+    print("Naqt qabul qilindi. Rahmat!")
+else:
+    while True:
+        k = input("Karta turi (Uzcard/Humo): ").title()
+        if k in kart_bal: break
+    knum = input("Karta raqami kiriting: ").strip()
+    if len(knum) < 12 or not knum.isdigit():
+        print("Karta raqami noto'g'ri. Dastur to'xtadi."); sys.exit()
+    ok = False
+    for i in range(3):
+        if getpass.getpass("PIN: ") == kart_pin[k]:
+            ok = True; break
+        print("PIN xato.")
+    if not ok:
+        print("PIN 3 marta xato. To'lov amalga oshmadi.")
     else:
-        print("Iltimos, faqat 'Naqt' yoki 'Karta' deb yozing.")
-
-print(f"To'lov turi: {tolov.capitalize()}")
-print(f"To'lanadigan summa: {int(umumiy_summa)} so'm")
-print("\nXaridingiz uchun rahmat!")
-
-
-if umumiy_summa > 100000:
-    chegirma = umumiy_summa * 0.10
-    umumiy_summa -= chegirma
-    print(f"\nUmumiy summa 100,000 so'mdan oshgani uchun 10% chegirma qo'llanildi: -{int(chegirma)} so'm")
-
-print(f"\nTo'lanadigan summa: {int(umumiy_summa)} so'm")
-#test
-
+        if kart_bal[k] >= jami:
+            kart_bal[k] -= int(jami)
+            print(f"To'lov muvaffaqiyatli. Qolgan balans: {kart_bal[k]} so'm")
+        else:
+            print(f"Hisobda yetarli pul yo'q ({kart_bal[k]} so'm).")
