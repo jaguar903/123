@@ -24,7 +24,7 @@ if jami > 100000:
     chegirma = int(jami * 0.10)
     jami -= chegirma
 
-print("\n--- Hisob ---")
+print("--- Hisob ---")
 for n,q in tanlangan.items():
     narx = maxs[n]
     print(f"{n}: {q} dona x {narx} = {narx*q} so'm")
@@ -34,7 +34,7 @@ print(f"To'lanishi kerak: {int(jami)} so'm")
 kart_bal = {"Uzcard":300000,"Humo":200000}
 kart_pin = {"Uzcard":"1111","Humo":"2222"}
 
-typ = input("\nTo'lov (Naqt/Karta): ").strip().lower()
+typ = input("To'lov (Naqt/Karta): ").strip().lower()
 if typ == "naqt":
     print("Naqt qabul qilindi. Rahmat!")
 else:
@@ -46,14 +46,14 @@ else:
         print("Karta raqami noto'g'ri. Dastur to'xtadi."); sys.exit()
     ok = False
     for i in range(3):
-        if getpass.getpass("PIN: ") == kart_pin[k]:
+        if getpass.getpass("PIN: ") == kart_pin["karta turi"]:
             ok = True; break
         print("PIN xato.")
     if not ok:
         print("PIN 3 marta xato. To'lov amalga oshmadi.")
     else:
-        if kart_bal[k] >= jami:
-            kart_bal[k] -= int(jami)
-            print(f"To'lov muvaffaqiyatli. Qolgan balans: {kart_bal[k]} so'm")
+        if kart_bal["karta turi"] >= jami:
+            kart_bal["karta turi"] -= int(jami)
+            print(f"To'lov muvaffaqiyatli. Qolgan balans: {kart_bal["karta turi"]} so'm")
         else:
-            print(f"Hisobda yetarli pul yo'q ({kart_bal[k]} so'm).")
+            print(f"Hisobda yetarli pul yo'q ({kart_bal["karta turi"]} so'm).")
